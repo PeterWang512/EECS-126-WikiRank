@@ -39,9 +39,12 @@ public class DB {
                 sql = "SELECT * FROM pagelinks LIMIT " + limit;
             }
             ResultSet rs_pl = stmt.executeQuery(sql);
-
+            int count = 0;
             //STEP 5: Extract data from result set
             while(rs_pl.next()){
+                if (count % 10000 == 0) {
+                    System.out.println("Count: " + count);
+                }
                 //Retrieve by column name
                 int pl_from  = rs_pl.getInt("pl_from");
                 String pl_to_title = rs_pl.getString("pl_title");
@@ -68,7 +71,7 @@ public class DB {
                 }
                 rs_pg.close();
                 pstmt.close();
-
+                count++;
 
             }
             //STEP 6: Clean-up environment

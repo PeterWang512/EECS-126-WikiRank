@@ -9,7 +9,7 @@ import java.util.HashSet;
 public class WikiRank {
 
     public static void main(String[] args) {
-        DB db = new DB(50000);
+        DB db = new DB(0);
         HashMap<String, ArrayList<String>> map = db.getMap();
         HashSet<String> names = db.getSet();
 
