@@ -12,7 +12,7 @@ public class DB {
 
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "hello";
+    static final String PASS = "";
 
     public HashSet<String> names = new HashSet<String>();
     public HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();

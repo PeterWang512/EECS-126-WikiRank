@@ -13,6 +13,7 @@ public class Node {
     public double rank;
     public double newRank;
     public double dc;
+    public int position;
 
     public Node(String name) {
         this.name = name;

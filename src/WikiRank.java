@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by physiconomic on 2018/4/14.
@@ -34,7 +35,8 @@ public class WikiRank {
 
         g.pageRank();
         g.sortRanks();
-        g.printRanks(200);
 
+        //g.printRanks(200);
+        g.cluster(100,1000);
     }
 }
