@@ -11,6 +11,7 @@ public class WikiRank {
     public HashMap<String, ArrayList<String>> map;
     public HashSet<String> names;
     public Graph g;
+    // Set to true if already written db to file
     boolean retrieved = false;
 
     public WikiRank() {
@@ -63,7 +64,7 @@ public class WikiRank {
                      = new ObjectInputStream(new FileInputStream("./data/names.ser"))) {
 
             names = (HashSet<String>) ois.readObject();
-            System.out.println("Map read from file");
+            System.out.println("Names read from file");
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -116,11 +117,6 @@ public class WikiRank {
             wr.readFile();
         }
 
-        double[] dampings = {0.8, 0.9};
-        for (double d : dampings) {
-            wr.buildGraph(d);
-            wr.pageRank(d);
-        }
         System.out.println("State size: " + wr.names.size());
 
     }
