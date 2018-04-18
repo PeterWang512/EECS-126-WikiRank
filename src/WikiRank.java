@@ -1,25 +1,82 @@
-import java.io.IOException;
-import java.sql.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Created by physiconomic on 2018/4/14.
  */
 public class WikiRank {
 
-    public static void main(String[] args) throws IOException{
-        DB db = new DB(0);
-        HashMap<String, ArrayList<String>> map = db.getMap();
-        HashSet<String> names = db.getSet();
+    public HashMap<String, ArrayList<String>> map;
+    public HashSet<String> names;
+    public Graph g;
+    boolean retrieved = true;
 
-        Graph g = new Graph();
+    public WikiRank() {
+
+    }
+
+    public void retrieveData() {
+        // Retrieve Data
+        DB db = new DB(0);
+        map = db.getMap();
+        names = db.getSet();
+    }
+
+    public void writeToFile() {
+        try (ObjectOutputStream oos =
+                     new ObjectOutputStream(new FileOutputStream("./data/map.ser"))) {
+
+            oos.writeObject(map);
+
+            System.out.println("Map written to file");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try (ObjectOutputStream oos =
+                     new ObjectOutputStream(new FileOutputStream("./data/names.ser"))) {
+
+            oos.writeObject(names);
+
+            System.out.println("Names written to file");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void readFile() {
+        try (ObjectInputStream ois
+                              = new ObjectInputStream(new FileInputStream("./data/map.ser"))) {
+
+            map = (HashMap<String, ArrayList<String>>) ois.readObject();
+            System.out.println("Map read from file");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        try (ObjectInputStream ois
+                     = new ObjectInputStream(new FileInputStream("./data/names.ser"))) {
+
+            names = (HashSet<String>) ois.readObject();
+            System.out.println("Map read from file");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    public void buildGraph(double damping) {
+        g = new Graph();
         HashMap<String, Node> stringToNode = new HashMap<String, Node>();
 
         for (String name : names) {
-            Node n = new Node(name);
+            Node n = new Node(name, damping);
             stringToNode.put(name, n);
             g.states.add(n);
         }
@@ -33,11 +90,30 @@ public class WikiRank {
             }
             n.setWeight();
         }
+    }
 
+    public void pageRank() {
+        // PageRank
         g.pageRank();
         g.sortRanks();
-
         g.printRanks(200);
-        g.cluster(100,1000);
+    }
+
+    public static void main(String[] args) throws IOException {
+        WikiRank wr = new WikiRank();
+        if (!wr.retrieved) {
+            wr.retrieveData();
+            wr.writeToFile();
+        } else {
+            wr.readFile();
+        }
+
+        double[] dampings = {0.8, 0.9};
+        for (double d : dampings) {
+            wr.buildGraph(d);
+            wr.pageRank();
+        }
+        System.out.println("State size: " + wr.names.size());
+
     }
 }
