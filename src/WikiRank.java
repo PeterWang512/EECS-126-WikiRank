@@ -11,7 +11,7 @@ public class WikiRank {
     public HashMap<String, ArrayList<String>> map;
     public HashSet<String> names;
     public Graph g;
-    boolean retrieved = true;
+    boolean retrieved = false;
 
     public WikiRank() {
 
@@ -99,8 +99,8 @@ public class WikiRank {
         try {
             String file = "damp" + d;
             g.printRanks(file, 200);
-            g.cluster(file, 100, 1000);
-            g.toJson(file, 1000);
+            g.cluster(file, 10, 100);
+            g.toJson(file, 100);
         } catch (Exception e) {
             e.printStackTrace();
         }
