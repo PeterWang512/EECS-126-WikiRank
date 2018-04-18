@@ -120,6 +120,7 @@ public class Graph {
             }
             if(freq[max_index][i] > 0){
                 clusters.get(max_index).add(states.get(i));
+                states.get(i).cluster = max_index;
             }
         }
         int idx = 0;
