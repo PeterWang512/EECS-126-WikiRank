@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public class WikiRank {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         DB db = new DB(0);
         HashMap<String, ArrayList<String>> map = db.getMap();
         HashSet<String> names = db.getSet();
