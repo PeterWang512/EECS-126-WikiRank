@@ -36,7 +36,7 @@ public class WikiRank {
         g.pageRank();
         g.sortRanks();
 
-        //g.printRanks(200);
+        g.printRanks(200);
         g.cluster(100,1000);
     }
 }

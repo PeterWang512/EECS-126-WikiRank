@@ -43,7 +43,7 @@ public class DB {
             //STEP 5: Extract data from result set
             while(rs_pl.next()){
                 if (count % 10000 == 0) {
-                    System.out.println("Count: " + count);
+                    System.out.println("Number of pages imported: " + count);
                 }
                 //Retrieve by column name
                 int pl_from  = rs_pl.getInt("pl_from");

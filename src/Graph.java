@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +18,8 @@ public class Graph {
     }
 
     public void pageRank() {
+        System.out.println("Computing PageRank!");
+        System.out.println("Number of Iterations: ");
         for (int i = 0; i < NUM_ITER; i++) {
             System.out.print(i + " ");
             if ((i+1) % 30 == 0)
@@ -42,19 +46,22 @@ public class Graph {
         Collections.sort(states, (n1, n2) -> -(Double.compare(n1.rank, n2.rank)));
     }
 
-    public void printRanks(int threshold) {
+    public void printRanks(int threshold) throws IOException {
+        PrintWriter writer = new PrintWriter("ranks.txt", "UTF-8");
         int idx = 0;
         for (Node s : states) {
-            System.out.println(s.name + ": " + s.rank);
+            writer.println(s.name + ": " + s.rank);
             idx += 1;
             if (idx >= threshold) {
                 break;
             }
         }
+        writer.close();
     }
 
     //cluster the top n entries into k clusters
-    public void cluster(int k, int n){
+    public void cluster(int k, int n) throws IOException{
+        PrintWriter writer = new PrintWriter("clusters.txt", "UTF-8");
         double c = 0.05;
         int[][] freq = new int[k][n];
         List<Node> centroids = new ArrayList<>();
@@ -117,11 +124,12 @@ public class Graph {
         for(HashSet<Node> cluster: clusters){
             System.out.println(idx);
             for(Node s: cluster){
-                System.out.println(s.name + ": " + s.rank);
+                writer.println(s.name + ": " + s.rank);
             }
             idx++;
-            System.out.println();
+            writer.println();
         }
+        writer.close();
     }
 
 }
