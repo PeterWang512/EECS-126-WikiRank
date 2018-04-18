@@ -1,4 +1,6 @@
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -46,8 +48,8 @@ public class Graph {
         Collections.sort(states, (n1, n2) -> -(Double.compare(n1.rank, n2.rank)));
     }
 
-    public void printRanks(int threshold) throws IOException {
-        PrintWriter writer = new PrintWriter("ranks.txt", "UTF-8");
+    public void printRanks(String file, int threshold) throws IOException {
+        PrintWriter writer = new PrintWriter(file+"-ranks.txt", "UTF-8");
         int idx = 0;
         for (Node s : states) {
             writer.println(s.name + ": " + s.rank);
@@ -60,8 +62,8 @@ public class Graph {
     }
 
     //cluster the top n entries into k clusters
-    public void cluster(int k, int n) throws IOException{
-        PrintWriter writer = new PrintWriter("clusters.txt", "UTF-8");
+    public void cluster(String file, int k, int n) throws IOException{
+        PrintWriter writer = new PrintWriter(file+"-clusters.txt", "UTF-8");
         double c = 0.05;
         int[][] freq = new int[k][n];
         List<Node> centroids = new ArrayList<>();
@@ -130,6 +132,44 @@ public class Graph {
             writer.println();
         }
         writer.close();
+    }
+
+    // generate json file for visualization with
+    // top n entries of graph
+    public void toJson(String file, int n) {
+        JSONObject json = new JSONObject();
+        JSONArray node_array = new JSONArray();
+        JSONArray link_array = new JSONArray();
+        JSONObject obj;
+
+        for(int i = 0; i < n; i++) {
+            Node nd = states.get(i);
+            obj = new JSONObject();
+            obj.put("id", nd.name);
+            obj.put("group", nd.cluster);
+            node_array.add(obj);
+            for (Node l : nd.links) {
+                if (l.position != -1) {
+                    obj = new JSONObject();
+                    obj.put("source", nd.name);
+                    obj.put("target", l.name);
+                    int value = (nd.cluster==l.cluster) ? 1 : 5;
+                    obj.put("value", value);
+                    link_array.add(obj);
+                }
+            }
+        }
+
+        json.put("nodes", node_array);
+        json.put("links", link_array);
+
+        try {
+            FileWriter fileWriter = new FileWriter(file+".json");
+            fileWriter.write(json.toJSONString());
+            fileWriter.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
