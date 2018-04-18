@@ -5,7 +5,7 @@ import java.util.ArrayList;
  */
 public class Node {
 
-    public static double damping = 0.85;
+    public double damping = 0.85;
 
     String name;
     public ArrayList<Node> links = new ArrayList<>();
@@ -13,11 +13,13 @@ public class Node {
     public double rank;
     public double newRank;
     public double dc;
-    public int position;
+    public int position = -1;
+    public int cluster = -1;
 
-    public Node(String name) {
+    public Node(String name, double damping) {
         this.name = name;
         this.rank = 1.0;
+        this.damping = damping;
         this.dc = (1.0 - damping);
     }
 

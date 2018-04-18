@@ -92,11 +92,19 @@ public class WikiRank {
         }
     }
 
-    public void pageRank() {
+    public void pageRank(double d) {
         // PageRank
         g.pageRank();
         g.sortRanks();
-        g.printRanks(200);
+        try {
+            String file = "damp" + d;
+            g.printRanks(file, 200);
+            g.cluster(file, 100, 1000);
+            g.toJson(file, 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -111,7 +119,7 @@ public class WikiRank {
         double[] dampings = {0.8, 0.9};
         for (double d : dampings) {
             wr.buildGraph(d);
-            wr.pageRank();
+            wr.pageRank(d);
         }
         System.out.println("State size: " + wr.names.size());
 
