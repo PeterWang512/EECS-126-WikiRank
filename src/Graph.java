@@ -150,7 +150,7 @@ public class Graph {
             obj.put("group", nd.cluster);
             node_array.add(obj);
             for (Node l : nd.links) {
-                if (l.position != -1) {
+                if (l.position < n) {
                     obj = new JSONObject();
                     obj.put("source", nd.name);
                     obj.put("target", l.name);

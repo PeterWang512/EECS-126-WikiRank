@@ -12,7 +12,7 @@ public class WikiRank {
     public HashSet<String> names;
     public Graph g;
     // Set to true if already written db to file
-    boolean retrieved = false;
+    boolean retrieved = true;
 
     public WikiRank() {
 
@@ -100,8 +100,8 @@ public class WikiRank {
         try {
             String file = "damp" + d;
             g.printRanks(file, 200);
-            g.cluster(file, 10, 100);
-            g.toJson(file, 100);
+            g.cluster(file, 10, 1000);
+            g.toJson(file, 30);
         } catch (Exception e) {
             e.printStackTrace();
         }
